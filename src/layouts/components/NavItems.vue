@@ -65,6 +65,13 @@ async function logout() {
       href: '/service-lines',
     }"
   />
+  <VerticalNavLink
+    :item="{
+      title: 'Categories',
+      icon: 'ri-folder-2-line',
+      href: '/categories',
+    }"
+  />
 
   <VerticalNavLink
     :item="{

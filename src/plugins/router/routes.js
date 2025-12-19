@@ -31,6 +31,16 @@ export const routes = [
     ],
   },
   {
+    path: '/categories',
+    component: () => import('@/layouts/default.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/category/index.vue'),
+      }
+    ],
+  },
+  {
     path: '/',
     component: () => import('@/layouts/default.vue'),
     children: [

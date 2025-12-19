@@ -5,19 +5,43 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 
-    const form = ref({
-      email: '',
-      password: '',
-      remember: false,
-    })
+import { useAuthStore } from '@/stores/auth.store'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-    const vuetifyTheme = useTheme()
+const auth = useAuthStore();
+const router = useRouter();
 
-    const authThemeMask = computed(() => {
-      return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
-    })
+const error = ref('');
 
-    const isPasswordVisible = ref(false)
+const form = ref({
+  email: '',
+  password: '',
+  remember: false,
+})
+
+async function submit() {
+    error.value = '';
+    try {
+        const res = await auth.login({
+            email: form.value.email,
+            password: form.value.password,
+        });
+        if (!res.status) {
+            throw new Error(res.message);
+        }
+        router.push('/');
+    } catch (e) {
+        error.value = 'Email หรือ Password ไม่ถูกต้อง';
+    }
+}
+
+const vuetifyTheme = useTheme()
+const authThemeMask = computed(() => {
+  return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
+})
+
+const isPasswordVisible = ref(false)
 </script>
 
 <template>
@@ -47,7 +71,7 @@ import { useTheme } from 'vuetify'
       </VCardItem>
 
       <VCardText>
-        <VForm @submit.prevent="() => {}">
+        <VForm @submit.prevent="submit">
           <VRow>
             <!-- email -->
             <VCol cols="12">
@@ -89,7 +113,6 @@ import { useTheme } from 'vuetify'
               <VBtn
                 block
                 type="submit"
-                to="/"
               >
                 Login
               </VBtn>
@@ -109,9 +132,6 @@ import { useTheme } from 'vuetify'
               </RouterLink>
             </VCol>
 
-          
-
-    
           </VRow>
         </VForm>
       </VCardText>

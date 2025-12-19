@@ -7,6 +7,7 @@ export const routes = [
       {
         path: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: 'account-settings',
@@ -36,6 +37,7 @@ export const routes = [
     children: [
       {
         path: 'login',
+        name: 'login',
         component: () => import('@/pages/login.vue'),
       },
       {

@@ -1,5 +1,6 @@
 <script setup>
 import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTitle.vue';
+import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue';
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 
 import { useAuthStore } from '@/stores/auth.store';
@@ -21,11 +22,34 @@ async function logout() {
       heading: 'Apps & Pages',
     }"
   />
+  <!-- 👉 Front Pages -->
+  <VerticalNavGroup
+    :item="{
+      title: 'Tickets',
+      icon: 'ri-coupon-3-line',
+    }"
+  >
+    <VerticalNavLink
+      :item="{
+        title: 'Tickets List',
+        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
+        target: '_blank',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'Add Tickets',
+        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
+        target: '_blank',
+      }"
+    />
+  </VerticalNavGroup>
+
   <VerticalNavLink
     :item="{
       title: 'Vessels',
       icon: 'ri-ship-2-line',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
+      href: '/vessels',
       target: '_blank',
     }"
   />

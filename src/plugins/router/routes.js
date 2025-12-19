@@ -1,5 +1,15 @@
 export const routes = [
   { path: '/', redirect: '/dashboard' },
+  { 
+    path: '/vessels',
+    component: () => import('@/layouts/default.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/vessels/index.vue'),
+      }
+    ],
+  },
   {
     path: '/',
     component: () => import('@/layouts/default.vue'),
@@ -8,27 +18,7 @@ export const routes = [
         path: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
         meta: { requiresAuth: true },
-      },
-      {
-        path: 'account-settings',
-        component: () => import('@/pages/account-settings.vue'),
-      },
-      {
-        path: 'icons',
-        component: () => import('@/pages/icons.vue'),
-      },
-      {
-        path: 'cards',
-        component: () => import('@/pages/cards.vue'),
-      },
-      {
-        path: 'tables',
-        component: () => import('@/pages/tables.vue'),
-      },
-      {
-        path: 'form-layouts',
-        component: () => import('@/pages/form-layouts.vue'),
-      },
+      }
     ],
   },
   {

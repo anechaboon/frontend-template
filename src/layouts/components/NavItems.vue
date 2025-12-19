@@ -62,7 +62,7 @@ async function logout() {
     :item="{
       title: 'Service Lines',
       icon: 'ri-service-line',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/calendar',
+      href: '/service-lines',
     }"
   />
 

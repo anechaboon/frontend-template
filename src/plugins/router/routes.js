@@ -21,6 +21,16 @@ export const routes = [
     ],
   },
   {
+    path: '/service-lines',
+    component: () => import('@/layouts/default.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/service-line/index.vue'),
+      }
+    ],
+  },
+  {
     path: '/',
     component: () => import('@/layouts/default.vue'),
     children: [

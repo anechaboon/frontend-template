@@ -50,6 +50,7 @@
                     v-if="editingVessel"
                     :vessel="editingVessel"
                     @submit="saveVessel"
+                    @cancel="closeModal"
                 />
             </v-card-text>
             
@@ -168,6 +169,10 @@ const deleteVes = (vessel) => {
             }
         }
     })
+}
+
+const closeModal = () => {
+    dialog.value = false
 }
 
 onMounted(() => {

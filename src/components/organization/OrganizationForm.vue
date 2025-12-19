@@ -57,23 +57,37 @@
                         rows="3"
                     ></v-textarea>
                 </v-col>
+
+                <v-col cols="12" md="6">
+                    <v-select
+                        v-model="organization.status"
+                        :items="globalStatusOptions"
+                        label="Status"
+                        :rules="[rules.required]"
+                        required
+                    ></v-select>
+                </v-col>
             </v-row>
         </v-container>
 
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
-                    Submit
-                </v-btn>
-                <v-btn color="grey" variant="text" @click="handleCancel">
-                    Cancel
-                </v-btn>
-            </v-card-actions>
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
+                Submit
+            </v-btn>
+            <v-btn color="grey" variant="text" @click="handleCancel">
+                Cancel
+            </v-btn>
+        </v-card-actions>
     </v-form>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { GLOBAL_STATUS } from '@/constants/global.js';
+import { enumToOptions } from '@/utils/helper.js';
+import { ref } from 'vue';
+
+const globalStatusOptions = enumToOptions(GLOBAL_STATUS)
 
 const valid = ref(false)
 const props = defineProps({

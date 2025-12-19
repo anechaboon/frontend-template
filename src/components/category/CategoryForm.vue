@@ -34,6 +34,16 @@
                                 color="primary"
                             ></v-switch>
                         </v-col>
+
+                        <v-col cols="12">
+                            <v-select
+                                v-model="serviceLine.status"
+                                :items="globalStatusOptions"
+                                label="Status"
+                                :rules="[rules.required]"
+                                required
+                            ></v-select>
+                        </v-col>
                     </v-row>
                 </v-container>
             </v-card-text>
@@ -61,7 +71,11 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { GLOBAL_STATUS } from '@/constants/global.js';
+import { enumToOptions } from '@/utils/helper.js';
+import { computed, ref, watch } from 'vue';
+
+const globalStatusOptions = enumToOptions(GLOBAL_STATUS)
 
 const props = defineProps({
     category: {

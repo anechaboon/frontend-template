@@ -36,6 +36,18 @@
                     ></v-text-field>
                 </v-col>
             </v-row>
+
+            <v-row>
+                <v-col cols="12" md="6">
+                    <v-select
+                        v-model="vessel.status"
+                        :items="globalStatusOptions"
+                        label="Status"
+                        :rules="[rules.required]"
+                        required
+                    ></v-select>
+                </v-col>
+            </v-row>
         </v-container>
 
         <v-card-actions>
@@ -52,7 +64,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { GLOBAL_STATUS } from '@/constants/global.js';
+import { enumToOptions } from '@/utils/helper.js';
+import { ref } from 'vue';
+
+const globalStatusOptions = enumToOptions(GLOBAL_STATUS)
 
 const valid = ref(false)
 const props = defineProps({

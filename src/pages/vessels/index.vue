@@ -32,20 +32,42 @@
 
                     <template v-slot:item.actions="{ item }">
                         <v-btn icon="ri-pencil-line" size="small" variant="text" @click="editVessel(item)" />
-                        <v-btn icon="ri-delete-bin-line" size="small" variant="text" color="error" @click="deleteVessel(item)" />
+                        <v-btn icon="ri-delete-bin-line" size="small" variant="text" color="error" @click="deleteVes(item)" />
                     </template>
                 </v-data-table>
             </v-card-text>
         </v-card>
     </v-container>
+    <v-dialog v-model="dialog" max-width="600" persistent>
+        <v-card>
+            <v-card-title class="d-flex justify-space-between align-center">
+                <span>Edit Vessel</span>
+                <v-btn icon="ri-close-circle-line" variant="text" @click="dialog = false" />
+            </v-card-title>
+        
+            <v-card-text>
+                <VesselForm
+                    v-if="editingVessel"
+                    :vessel="editingVessel"
+                    @submit="saveVessel"
+                />
+            </v-card-text>
+            
+        </v-card>
+    </v-dialog>
+
 </template>
 
 <script setup>
-import { getVessels } from '@/api/vessel.api';
+import { createVessel, deleteVessel, getVessel, getVessels, updateVessel } from '@/api/vessel.api';
+import VesselForm from '@/components/vessel/VesselForm.vue';
+import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 
-const vessels = ref([])
+const dialog = ref(false)
+const editingVessel = ref(null)
 
+const vessels = ref([])
 const search = ref('')
 const loading = ref(false)
 
@@ -81,25 +103,82 @@ const fetchVessels = async () => {
 }
 
 const addVessel = () => {
-    // Navigate to add vessel page or open dialog
-    console.log('Add vessel')
+    loading.value = true
+    editingVessel.value = {
+        name: '',
+        imo_number: '',
+        type: '',
+        flag: '',
+        status: 'active'
+    }
+    dialog.value = true
+    loading.value = false
+
 }
 
-const editVessel = (vessel) => {
-    // Navigate to edit vessel page or open dialog
-    console.log('Edit vessel:', vessel)
+const saveVessel = async (vessel) => {
+    let res = {}
+    if (!vessel.id){
+        res = await createVessel(vessel)
+    } else {
+        res = await updateVessel(vessel.id, vessel)
+    }
+
+    if (res.status === 200 && res.data.status) {
+        await fetchVessels()
+    } 
+    dialog.value = false
 }
 
-const deleteVessel = (vessel) => {
-    // Show confirmation dialog and delete
-    console.log('Delete vessel:', vessel)
+const editVessel = async (vessel) => {
+    loading.value = true
+    try {
+        const res = await getVessel(vessel.id)
+        editingVessel.value = res.data.data
+        dialog.value = true
+    } finally {
+        loading.value = false
+    }
+}
+
+const deleteVes = (vessel) => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to delete vessel "${vessel.name}"?`,
+        icon: 'warning',
+        customClass: {
+            confirmButton: 'my-custom-confirm-btn',
+            cancelButton: 'my-custom-cancel-btn'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const res = await deleteVessel(vessel.id)
+                if (res.status === 200 && res.data.status) {
+                    await fetchVessels()
+                    Swal.fire('Deleted!', 'The vessel has been deleted.', 'success')
+                } else {
+                    Swal.fire('Error!', 'Failed to delete the vessel.', 'error')
+                }
+            } catch (error) {
+                Swal.fire('Error!', 'An error occurred while deleting the vessel.', 'error')
+            }
+        }
+    })
 }
 
 onMounted(() => {
     fetchVessels()
 })
 </script>
-
-<style scoped>
-/* Add custom styles if needed */
+<style>
+    .my-custom-confirm-btn {
+        color: #ffffff !important;
+    }
+    .my-custom-cancel-btn {
+        color: #ffffff !important;
+    }
 </style>

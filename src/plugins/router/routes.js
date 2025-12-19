@@ -10,6 +10,16 @@ export const routes = [
       }
     ],
   },
+  { 
+    path: '/organizations',
+    component: () => import('@/layouts/default.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/organizations/index.vue'),
+      }
+    ],
+  },
   {
     path: '/',
     component: () => import('@/layouts/default.vue'),

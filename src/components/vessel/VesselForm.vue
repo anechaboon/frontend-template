@@ -36,27 +36,25 @@
                     ></v-text-field>
                 </v-col>
             </v-row>
-
-            <v-row>
-                <v-col cols="12">
-                    <v-btn color="primary" @click="submit" :disabled="!valid">
-                        Submit
-                    </v-btn>
-                    <v-btn class="ml-2" @click="reset">
-                        Reset
-                    </v-btn>
-                </v-col>
-            </v-row>
         </v-container>
+
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
+                Submit
+            </v-btn>
+            <v-btn color="grey" variant="text" @click="handleCancel">
+                Cancel
+            </v-btn>
+        </v-card-actions>
+
     </v-form>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const form = ref(null)
 const valid = ref(false)
-
 const props = defineProps({
     vessel: {
         type: Object,
@@ -77,17 +75,17 @@ const vesselTypes = [
 const rules = {
     required: value => !!value || 'Required.'
 }
+    
+const emit = defineEmits(['submit', 'cancel'])
 
-const emit = defineEmits(['submit'])
-
-const submit = () => {
+const handleSubmit = () => {
     if (valid.value) {
         emit('submit', props.vessel)
     }
 }
 
-const reset = () => {
-    form.value.reset()
+const handleCancel = () => {
+    emit('cancel')
 }
 </script>
 

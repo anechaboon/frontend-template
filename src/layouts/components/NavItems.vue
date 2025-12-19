@@ -40,7 +40,6 @@ async function logout() {
       :item="{
         title: 'Add Tickets',
         href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
-        target: '_blank',
       }"
     />
   </VerticalNavGroup>
@@ -50,15 +49,13 @@ async function logout() {
       title: 'Vessels',
       icon: 'ri-ship-2-line',
       href: '/vessels',
-      target: '_blank',
     }"
   />
   <VerticalNavLink
     :item="{
       title: 'Organizations',
       icon: 'ri-kanban-view',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/chat',
-      target: '_blank',
+      href: 'organizations',
     }"
   />
   <VerticalNavLink
@@ -66,7 +63,6 @@ async function logout() {
       title: 'Service Lines',
       icon: 'ri-service-line',
       href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/calendar',
-      target: '_blank',
     }"
   />
 

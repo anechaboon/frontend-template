@@ -22,10 +22,7 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
           <VIcon icon="ri-menu-line" />
         </IconBtn>
         <VSpacer />
-
-
         <NavbarThemeSwitcher class="me-2" />
-
         <UserProfile />
       </div>
     </template>

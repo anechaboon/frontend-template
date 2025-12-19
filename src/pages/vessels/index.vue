@@ -2,10 +2,8 @@
     <v-container fluid>
         <v-card>
             <v-card-title class="d-flex justify-space-between align-center">
-                <span class="text-h5">Vessel List</span>
-                <v-btn color="primary" prepend-icon="mdi-plus" @click="addVessel">
-                    Add Vessel
-                </v-btn>
+                <span class="text-h5 bg-color-">Vessel List</span>
+                <v-btn color="primary" @click="addVessel">Add Vessel</v-btn>
             </v-card-title>
 
             <v-card-text>
@@ -33,8 +31,8 @@
                     </template>
 
                     <template v-slot:item.actions="{ item }">
-                        <v-btn icon="mdi-pencil" size="small" variant="text" @click="editVessel(item)" />
-                        <v-btn icon="mdi-delete" size="small" variant="text" color="error" @click="deleteVessel(item)" />
+                        <v-btn icon="ri-pencil-line" size="small" variant="text" @click="editVessel(item)" />
+                        <v-btn icon="ri-delete-bin-line" size="small" variant="text" color="error" @click="deleteVessel(item)" />
                     </template>
                 </v-data-table>
             </v-card-text>
@@ -43,15 +41,17 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { getVessels } from '@/api/vessel.api';
+import { onMounted, ref } from 'vue';
+
+const vessels = ref([])
 
 const search = ref('')
 const loading = ref(false)
-const vessels = ref([])
 
 const headers = [
     { title: 'Vessel Name', key: 'name', sortable: true },
-    { title: 'IMO Number', key: 'imoNumber', sortable: true },
+    { title: 'IMO Number', key: 'imo_number', sortable: true },
     { title: 'Type', key: 'type', sortable: true },
     { title: 'Flag', key: 'flag', sortable: true },
     { title: 'Status', key: 'status', sortable: true },
@@ -60,10 +60,10 @@ const headers = [
 
 const getStatusColor = (status) => {
     const colors = {
-        'Active': 'success',
-        'Inactive': 'error',
-        'Maintenance': 'warning',
-        'In Transit': 'info'
+        'active': 'success',
+        'inactive': 'error',
+        'maintenance': 'warning',
+        'in transit': 'info'
     }
     return colors[status] || 'default'
 }
@@ -71,16 +71,8 @@ const getStatusColor = (status) => {
 const fetchVessels = async () => {
     loading.value = true
     try {
-        // Replace with your API call
-        // const response = await fetch('/api/vessels')
-        // vessels.value = await response.json()
-        
-        // Mock data
-        vessels.value = [
-            { id: 1, name: 'Ocean Star', imoNumber: '9123456', type: 'Container', flag: 'Panama', status: 'Active' },
-            { id: 2, name: 'Sea Princess', imoNumber: '9234567', type: 'Tanker', flag: 'Liberia', status: 'In Transit' },
-            { id: 3, name: 'Wave Runner', imoNumber: '9345678', type: 'Bulk Carrier', flag: 'Singapore', status: 'Maintenance' }
-        ]
+        const res = await getVessels()
+        vessels.value = res.data.data
     } catch (error) {
         console.error('Error fetching vessels:', error)
     } finally {

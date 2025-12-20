@@ -1,5 +1,21 @@
+
 export const routes = [
-  { path: '/', redirect: '/dashboard' },
+  {   
+    path: '/', 
+    redirect: '/dashboard',
+    meta: { requiresAuth: true },
+  },
+  { 
+    path: '/tickets',
+    component: () => import('@/layouts/default.vue'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/pages/ticket/index.vue'),
+        meta: { requiresAuth: true },
+      }
+    ],
+  },
   { 
     path: '/vessels',
     component: () => import('@/layouts/default.vue'),
@@ -7,6 +23,7 @@ export const routes = [
       {
         path: '',
         component: () => import('@/pages/vessels/index.vue'),
+        meta: { requiresAuth: true },
       }
     ],
   },
@@ -17,6 +34,7 @@ export const routes = [
       {
         path: '',
         component: () => import('@/pages/organizations/index.vue'),
+        meta: { requiresAuth: true },
       }
     ],
   },
@@ -27,6 +45,7 @@ export const routes = [
       {
         path: '',
         component: () => import('@/pages/service-line/index.vue'),
+        meta: { requiresAuth: true },
       }
     ],
   },
@@ -37,6 +56,7 @@ export const routes = [
       {
         path: '',
         component: () => import('@/pages/category/index.vue'),
+        meta: { requiresAuth: true },
       }
     ],
   },
@@ -63,6 +83,12 @@ export const routes = [
       {
         path: 'register',
         component: () => import('@/pages/register.vue'),
+      },
+
+      {
+        path: '/tickets/add',
+        component: () => import('@/pages/ticket/ticketFormPage.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/:pathMatch(.*)*',

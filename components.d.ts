@@ -20,6 +20,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     ServiceLineForm: typeof import('./src/components/service_line/ServiceLineForm.vue')['default']
     ThemeSwitcher: typeof import('./src/@core/components/ThemeSwitcher.vue')['default']
+    TicketForm: typeof import('./src/components/Ticket/TicketForm.vue')['default']
     UpgradeToPro: typeof import('./src/components/UpgradeToPro.vue')['default']
     VesselForm: typeof import('./src/components/vessel/VesselForm.vue')['default']
     VueApexCharts: typeof import('vue3-apexcharts')['default']

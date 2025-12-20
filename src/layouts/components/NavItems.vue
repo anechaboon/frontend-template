@@ -32,14 +32,13 @@ async function logout() {
     <VerticalNavLink
       :item="{
         title: 'Tickets List',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
-        target: '_blank',
+        href: '/tickets',
       }"
     />
     <VerticalNavLink
       :item="{
         title: 'Add Tickets',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/apps/email',
+        href: '/tickets/add',
       }"
     />
   </VerticalNavGroup>

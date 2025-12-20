@@ -4,3 +4,10 @@ export function enumToOptions(enumObj) {
         value: key,
     }))
 }
+
+export function convertObjectToOptions(obj, indexTitle = 'title', indexValue = 'id') {
+    return Object.entries(obj).map(([key, value]) => ({
+        title: value[indexTitle],
+        value: value[indexValue],
+    }))
+}

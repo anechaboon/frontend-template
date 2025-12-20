@@ -3,37 +3,85 @@
         <v-container>
             <v-row>
                 <v-col cols="12" md="5">
-                    <v-card outlined class="pa-2 mb-4">
-                        <v-row class="px-3">
-                            <v-col cols="12" md="7" class="px-1">
+                    <v-card outlined class="pa-2 mb-4 pb-5">
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1 py-1">
                                 <h3>Ticket</h3>
-                                
+                            </v-col>
+                        </v-row>
+                        <!-- Ticket && Priority -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1">
                                 <!-- Title -->
                                 <v-text-field
                                     v-model="ticket.title"
                                     label="Title"
                                     :rules="[rules.required]"
-                                    class="my-2"
                                     required
                                 ></v-text-field>
-
+                            </v-col>
+                            <v-col cols="12" md="5" class="px-1">
+                                <!-- Priority -->
+                                <v-select
+                                    v-model="ticket.priority"
+                                    :items="globalPriorityOptions"
+                                    label="Priority"
+                                    :rules="[rules.required]"
+                                    required
+                                ></v-select>
+                            </v-col>
+                        </v-row>
+                        <!-- Email -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1">
                                 <!-- Email -->
                                 <v-text-field
                                     v-model="ticket.contact_email"
                                     label="Contact Email"
+                                    type="email"
+                                    autocomplete="email"
                                     :rules="[rules.required]"
-                                    class="my-2"
-                                    required
-                                ></v-text-field>
+                                />
+                            </v-col>
+                        </v-row>
+                        <!-- CC-Emails -->
+                        <template v-for="(cc_email, index) in ticket.cc_emails" :key="index">
+                            <v-row class="py-1 mt-0" >
+                                <v-col cols="10" md="7" class="px-1">
+                                    <!-- CC-Emails -->
+                                    <v-text-field
+                                        v-model="ticket.cc_emails[index]"
+                                        :label="`CC Email ${index + 1}`"
+                                        type="email"
+                                        autocomplete="new-email"
+                                        class="ml-3"
+                                    />
+                                </v-col>
 
-                                <!-- CC-Email -->
-                                <v-text-field
-                                    v-model="ticket.cc_email"
-                                    label="CC Email"
-                                    class="my-2"
-                                    required
-                                ></v-text-field>
+                                <v-col cols="2" md="5" class="px-1">
+                                    <!-- btn add more cc email -->
+                                    <v-btn
+                                        v-if="index === 0"
+                                        icon="ri-add-line"
+                                        size="small"
+                                        variant="text"
+                                        @click="ticket.cc_emails.push('')"
+                                    />
+                                    <v-btn
+                                        v-if="index > 0"
+                                        icon="ri-subtract-line"
+                                        size="small"
+                                        variant="text"
+                                        color="error"
+                                        @click="ticket.cc_emails.splice(index, 1)"
+                                    />
 
+                                </v-col>
+                            </v-row>
+                        </template>
+                        <!-- Description -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1">
                                 <v-textarea
                                     v-model="ticket.description"
                                     rows="3"
@@ -41,103 +89,111 @@
                                 ></v-textarea>
                                 
                             </v-col>
-                            <v-col cols="12" md="5" class="px-1">
-                                <div style="height: 1.6rem;"></div>
-                                <!-- Priority -->
-                                <v-select
-                                    v-model="ticket.priority"
-                                    :items="globalPriorityOptions"
-                                    label="Priority"
-                                    :rules="[rules.required]"
-                                    class="my-2"
-                                    required
-                                ></v-select>
-                            </v-col>
                         </v-row>
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="4">
-                    <v-card outlined class="pa-2 mb-4" min-height="310">
-                        <v-row class="px-3">
-                            <v-col cols="12" md="12" class="px-1">
+                    <v-card outlined class="pa-2 mb-4 pb-5" min-height="377">
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1 py-1">
                                 <h3>Organization</h3>
+                            </v-col>
+                        </v-row>
+                        <!-- Organization -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <!-- Organization -->
                                 <v-select
                                     v-model="ticket.organization_id"
                                     :items="organizationOptions"
                                     label="Organization"
-                                    class="my-2"
                                     required
                                 ></v-select>
-
+                            </v-col>
+                        </v-row>
+                        <!-- Vessel -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <!-- Vessel -->
                                 <v-select
                                     v-model="ticket.vessel_id"
                                     :items="vesselOptions"
                                     label="Vessel"
-                                    class="my-2"
+                                    :rules="[rules.required]"
                                     required
                                 ></v-select>
-
-                                <!-- Assigned To -->
+                            </v-col>
+                        </v-row>
+                        <!-- Assigned To -->
+                        <!-- Description -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <v-select
                                     v-model="ticket.assigned_to_user_id"
                                     :items="userOptions"
                                     label="Assigned To"
-                                    class="my-2"
                                     required
                                 ></v-select>
+                                
                             </v-col>
-                            
                         </v-row>
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="3">
-                    <v-card outlined class="pa-2 mb-4" min-height="310">
-                        <v-row class="px-3">
-                            <v-col cols="12" md="12" class="px-1">
+                    <v-card outlined class="pa-2 mb-4 pb-5" min-height="377">
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="7" class="px-1 py-1">
                                 <h3>Category</h3>
+                            </v-col>
+                        </v-row>
+                        <!-- Category -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <!-- Category -->
                                 <v-select
                                     v-model="ticket.category_id"
                                     :items="categoryOptions"
                                     label="Category"
-                                    class="my-2"
                                     required
                                 ></v-select>
-
+                            </v-col>
+                        </v-row>
+                        <!-- Status -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <!-- Status -->
                                 <v-select
                                     v-model="ticket.status"
                                     :items="ticketStatusOptions"
                                     label="Status"
-                                    class="my-2"
+                                    :rules="[rules.required]"
                                     required
                                 ></v-select>
-
-                                <!-- Service Line -->
+                            </v-col>
+                        </v-row>
+                        <!-- Service Line -->
+                        <v-row class="px-3 py-1 mt-0">
+                            <v-col cols="12" md="12" class="px-1">
                                 <v-select
                                     v-model="ticket.service_line_id"
                                     :items="serviceLineOptions"
                                     label="Service Line"
-                                    class="my-2"
                                     required
                                 ></v-select>
+                                
                             </v-col>
-                            
                         </v-row>
                     </v-card>
-
                 </v-col>
             </v-row>
-            <v-row>
+            <v-row class="mt-0">
                 <v-col cols="12" class="px-3">
                     <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
                             Submit
                         </v-btn>
-                        <v-btn color="grey" variant="text" >
+                        <v-btn color="grey" variant="text"  @click="handleReset">
                             Reset
                         </v-btn>
                     </v-card-actions>
@@ -165,6 +221,7 @@ const ticket = ref({
     title: '',
     description: '',
     contact_email: '',
+    cc_emails: [''],
     priority: null,
     category_id: null,
     assigned_to_user_id: null,
@@ -238,6 +295,24 @@ const handleSubmit = async () => {
         const res = await createTicket(ticket.value)
         console.log('log:tag:res', res);
     }
+}
+
+const handleReset = () => {
+    ticket.value = {
+        title: '',
+        description: '',
+        contact_email: '',
+        cc_emails: [''],
+        priority: null,
+        category_id: null,
+        assigned_to_user_id: null,
+        organization_id: null,
+        vessel_id: null,
+        service_line_id: null,
+        status: 'open'
+    }
+    const form = ref('form')
+    form.value.resetValidation()
 }
 
 

@@ -13,7 +13,12 @@ export const routes = [
         path: '',
         component: () => import('@/pages/ticket/index.vue'),
         meta: { requiresAuth: true },
-      }
+      },
+      {
+        path: '/tickets/add',
+        component: () => import('@/pages/ticket/ticketFormPage.vue'),
+        meta: { requiresAuth: true },
+      },
     ],
   },
   { 
@@ -83,12 +88,6 @@ export const routes = [
       {
         path: 'register',
         component: () => import('@/pages/register.vue'),
-      },
-
-      {
-        path: '/tickets/add',
-        component: () => import('@/pages/ticket/ticketFormPage.vue'),
-        meta: { requiresAuth: true },
       },
       {
         path: '/:pathMatch(.*)*',

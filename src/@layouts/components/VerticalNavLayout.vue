@@ -1,9 +1,10 @@
 <script>
-import VerticalNav from '@layouts/components/VerticalNav.vue'
-import { useDisplay } from 'vuetify'
+import VerticalNav from '@layouts/components/VerticalNav.vue';
+import { useDisplay } from 'vuetify';
 
 export default defineComponent({
-  setup(props, { slots }) {
+  setup(props, { slots, expose }) {
+    const isVerticalNavCollapsed = ref(false)
     const isOverlayNavActive = ref(false)
     const isLayoutOverlayVisible = ref(false)
     const toggleIsOverlayNavActive = useToggle(isOverlayNavActive)
@@ -15,9 +16,16 @@ export default defineComponent({
     // We want to show overlay if overlay nav is visible and want to hide overlay if overlay is hidden and vice versa.
     syncRef(isOverlayNavActive, isLayoutOverlayVisible)
     
+    // toggle collapse : Watcher to show/hide layout overlay based on overlay nav state
+    expose({ // Expose methods to parent component
+      toggleVerticalNavCollapse() {
+        isVerticalNavCollapsed.value = !isVerticalNavCollapsed.value
+      },
+    })
+
     return () => {
       // 👉 Vertical nav
-      const verticalNav = h(VerticalNav, { isOverlayNavActive: isOverlayNavActive.value, toggleIsOverlayNavActive }, {
+      const verticalNav = h(VerticalNav, { isOverlayNavActive: isOverlayNavActive.value, toggleIsOverlayNavActive, isCollapsed: isVerticalNavCollapsed.value,  }, {
         'nav-header': () => slots['vertical-nav-header']?.({ toggleIsOverlayNavActive }),
         'before-nav-items': () => slots['before-vertical-nav-items']?.(),
         'default': () => slots['vertical-nav-content']?.(),
@@ -51,6 +59,7 @@ export default defineComponent({
         class: [
           'layout-wrapper layout-nav-type-vertical layout-navbar-static layout-footer-static layout-content-width-fluid',
           mdAndDown.value && 'layout-overlay-nav',
+          isVerticalNavCollapsed.value && 'layout-vertical-nav-collapsed', // ✅ เพิ่ม
           route.meta.layoutWrapperClasses,
         ],
       }, [

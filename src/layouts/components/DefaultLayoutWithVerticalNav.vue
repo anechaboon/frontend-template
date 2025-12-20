@@ -1,26 +1,36 @@
 <script setup>
 import NavItems from '@/layouts/components/NavItems.vue'
-import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import { ref } from 'vue'
+
+const layoutRef = ref()
 </script>
 
 <template>
-  <VerticalNavLayout>
+  <VerticalNavLayout ref="layoutRef">
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
       <div class="d-flex h-100 align-center">
-        <!-- 👉 Vertical nav toggle in overlay mode -->
         <IconBtn
           class="ms-n3 d-lg-none"
           @click="toggleVerticalOverlayNavActive(true)"
         >
           <VIcon icon="ri-menu-line" />
         </IconBtn>
+
+        <!-- desktop collapse -->
+        <IconBtn
+          class="me-2 d-none d-lg-flex"
+          @click="layoutRef.toggleVerticalNavCollapse()"
+        >
+          <VIcon icon="ri-menu-fold-line" />
+        </IconBtn>
+
         <VSpacer />
         <NavbarThemeSwitcher class="me-2" />
         <UserProfile />
@@ -32,15 +42,8 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
         to="/"
         class="app-logo app-title-wrapper"
       >
-        <!-- eslint-disable vue/no-v-html -->
-        <div
-          class="d-flex"
-          v-html="logo"
-        />
-        <!-- eslint-enable -->
-
         <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-          Materio
+          Maritime
         </h1>
       </RouterLink>
 

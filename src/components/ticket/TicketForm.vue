@@ -109,7 +109,7 @@
                                 <!-- Status -->
                                 <v-select
                                     v-model="ticket.status"
-                                    :items="globalStatusOptions"
+                                    :items="ticketStatusOptions"
                                     label="Status"
                                     class="my-2"
                                     required
@@ -127,6 +127,20 @@
                             
                         </v-row>
                     </v-card>
+
+                </v-col>
+            </v-row>
+            <v-row>
+                <v-col cols="12" class="px-3">
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
+                            Submit
+                        </v-btn>
+                        <v-btn color="grey" variant="text" >
+                            Reset
+                        </v-btn>
+                    </v-card-actions>
                 </v-col>
             </v-row>
         </v-container>
@@ -139,13 +153,26 @@
 import { getCategories } from '@/api/category.api';
 import { getOrganizations } from '@/api/organization.api.js';
 import { getServiceLines } from '@/api/service-line.api.js';
+import { createTicket } from '@/api/ticket.api';
 import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
-import { GLOBAL_PRIORITIES, GLOBAL_STATUS } from '@/constants/global.js';
+import { GLOBAL_PRIORITIES, TICKET_STATUS } from '@/constants/global.js';
 import { convertObjectToOptions, enumToOptions } from '@/utils/helper.js';
 import { onMounted, ref } from 'vue';
-const globalStatusOptions = enumToOptions(GLOBAL_STATUS)
+const ticketStatusOptions = enumToOptions(TICKET_STATUS)
 const globalPriorityOptions = [{ title: 'Please Select', value: null }, ...enumToOptions(GLOBAL_PRIORITIES)]
+const ticket = ref({
+    title: '',
+    description: '',
+    contact_email: '',
+    priority: null,
+    category_id: null,
+    assigned_to_user_id: null,
+    organization_id: null,
+    vessel_id: null,
+    service_line_id: null,
+    status: 'open'
+})
 
 const valid = ref(false)
 const organizationOptions = ref([])
@@ -206,18 +233,17 @@ const fetchServiceLines = async () => {
     } 
 }
 
-const props = defineProps({
-    ticket: {
-        type: Object,
-        required: true
+const handleSubmit = async () => {
+    if (valid.value) {
+        const res = await createTicket(ticket.value)
+        console.log('log:tag:res', res);
     }
-})
+}
+
 
 const rules = {
     required: value => !!value || 'Required.'
 }
-    
-const emit = defineEmits(['submit', 'cancel'])
 
 onMounted(() => {
     fetchOrganizations()

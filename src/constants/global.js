@@ -4,6 +4,13 @@ const GLOBAL_STATUS = Object.freeze({
     pending: 'Pending',
 })
 
+const TICKET_STATUS = Object.freeze({
+    open: 'Open',
+    in_progress: 'In Progress',
+    resolved: 'Resolved',
+    closed: 'Closed',
+})
+
 const GLOBAL_PRIORITIES = Object.freeze({
     low: 'Low',
     medium: 'Medium',
@@ -11,5 +18,5 @@ const GLOBAL_PRIORITIES = Object.freeze({
     urgent: 'Urgent',
 })
 
-export { GLOBAL_PRIORITIES, GLOBAL_STATUS }
+export { GLOBAL_PRIORITIES, GLOBAL_STATUS, TICKET_STATUS };
 

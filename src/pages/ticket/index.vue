@@ -1,11 +1,6 @@
 <template>
     <v-container fluid>
         <v-card>
-            <v-card-title class="d-flex justify-space-between align-center">
-                <span class="text-h5 bg-color-">Ticket List</span>
-                <v-btn color="primary" @click="addTicket">Add Ticket</v-btn>
-            </v-card-title>
-
             <v-card-text>
                 <v-text-field
                     v-model="search"
@@ -60,7 +55,7 @@
 </template>
 
 <script setup>
-import { createTicket, deleteTicket, getTicket, getTickets, updateTicket } from '@/api/ticket.api';
+import { deleteTicket, getTicket, getTickets } from '@/api/ticket.api';
 import TicketForm from '@/components/ticket/TicketForm.vue';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
@@ -116,7 +111,7 @@ const addTicket = () => {
         organization_id: null,
         vessel_id: null,
         service_line_id: null,
-        status: 'active'
+        status: 'open'
     }
     dialog.value = true
     loading.value = false

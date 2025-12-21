@@ -95,28 +95,45 @@
 
                                     <!-- Content -->
                                     <v-col sm="8" md="8" lg="9">
-                                        <div class="d-flex flex-column">
-                                        <template v-for="(email, index) in ticket.cc_emails" :key="index">
-                                            <div class="d-flex align-center mb-1">
-                                            <v-chip
-                                                size="small"
-                                                color="primary"
-                                                variant="tonal"
-                                            >
-                                                {{ email.cc_email }}
-                                            </v-chip>
-
-                                            <v-btn
-                                                v-if="index === 0"
-                                                size="x-small"
-                                                icon
-                                                variant="text"
-                                                class="ml-1"
-                                            >
-                                                <v-icon size="14">ri-add-circle-line</v-icon>
-                                            </v-btn>
+                                        <div id="TicketCCEmails" class="d-flex flex-column">
+                                            <template v-for="(email, index) in ticket.cc_emails" :key="index">
+                                                <div class="d-flex align-center mb-1">
+                                                    <v-chip
+                                                        size="small"
+                                                        color="primary"
+                                                        variant="tonal"
+                                                    >
+                                                        {{ email.cc_email }}
+                                                    </v-chip>
+                                                    <v-btn
+                                                        size="small"
+                                                        variant="text"
+                                                        class="my-0 mx-0 px-1 text-none"
+                                                        @click="ticket.cc_emails.splice(index, 1)"
+                                                    >
+                                                        (remove)
+                                                    </v-btn>
+                                                    <v-btn
+                                                        v-if="index === 0"
+                                                        size="x-small"
+                                                        icon
+                                                        variant="text"
+                                                        class="ml-1"
+                                                    >
+                                                        <v-icon size="14" @click="handleAddCCEmail">ri-add-circle-line</v-icon>
+                                                    </v-btn>
+                                                </div>
+                                            </template>
+                                            <div class="d-flex align-center mb-1" v-if="ticket.cc_emails.length == 0 ">
+                                                <v-btn
+                                                    size="x-small"
+                                                    icon
+                                                    variant="text"
+                                                    class="ml-1"
+                                                >
+                                                    <v-icon size="14" @click="handleAddCCEmail">ri-add-circle-line</v-icon>
+                                                </v-btn>
                                             </div>
-                                        </template>
                                         </div>
                                     </v-col>
                                 </v-row>

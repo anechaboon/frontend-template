@@ -289,15 +289,14 @@ import { getTicket } from '@/api/ticket.api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
-import { PRIORITY_COLORS } from '@/constants/global.js';
-
 import { getCategories } from '@/api/category.api';
 import { getOrganizations } from '@/api/organization.api.js';
 import { getServiceLines } from '@/api/service-line.api.js';
 import { updateTicket } from '@/api/ticket.api';
 import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
-import { convertObjectToOptions, validateEmail } from '@/utils/helper.js';
+import { PRIORITY_COLORS, TICKET_STATUS } from '@/constants/global.js';
+import { convertObjectToOptions, enumToOptions, validateEmail } from '@/utils/helper.js';
 import Swal from 'sweetalert2';
 
 const organizationOptions = ref([])
@@ -306,6 +305,7 @@ const userOptions = ref([])
 const categoryOptions = ref([])
 const serviceLineOptions = ref([])
 const valid = ref(false)
+const ticketStatusOptions = enumToOptions(TICKET_STATUS)
 
 const fetchOrganizations = async () => {
     const { data } = await getOrganizations({ status: 'active' })

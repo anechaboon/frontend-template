@@ -11,3 +11,9 @@ export function convertObjectToOptions(obj, indexTitle = 'title', indexValue = '
         value: value[indexValue],
     }))
 }
+
+// validate email format
+export function validateEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}

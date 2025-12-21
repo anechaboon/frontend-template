@@ -277,9 +277,6 @@
                         <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
                             Submit
                         </v-btn>
-                        <v-btn color="grey" variant="text"  @click="handleReset">
-                            Reset
-                        </v-btn>
                     </v-card-actions>
                 </v-col>
             </v-row>
@@ -300,7 +297,7 @@ import { getServiceLines } from '@/api/service-line.api.js';
 import { updateTicket } from '@/api/ticket.api';
 import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
-import { convertObjectToOptions } from '@/utils/helper.js';
+import { convertObjectToOptions, validateEmail } from '@/utils/helper.js';
 import Swal from 'sweetalert2';
 
 const organizationOptions = ref([])
@@ -417,6 +414,9 @@ const ticket = ref({
     status: 'open'
 });
 const loading = ref(false);
+const isEditContactEmail = ref(false);
+const isEditTitle = ref(false);
+const ticketTitleTemp = ref('');
 
 const fetchTicketDetails = async (ticketId) => {
     loading.value = true;
@@ -427,10 +427,6 @@ const fetchTicketDetails = async (ticketId) => {
         loading.value = false;
     }
 }
-const isEditContactEmail = ref(false);
-const isEditTitle = ref(false);
-
-const ticketTitleTemp = ref('');
 
 const editTicketTitle = () => {
     const ticketTitleDiv = document.getElementById('ticket-title');
@@ -483,6 +479,31 @@ const handleAddCCEmail = () => {
     elementInput.onblur = () => {
         const emailValue = elementInput.value;
         if(emailValue){
+            // validate email format
+            if(!validateEmail(emailValue)){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Email',
+                    text: 'Please enter a valid email address.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                elementInput.remove();
+                return;
+            }
+            // check for duplicate email
+            const isDuplicate = ticket.value.cc_emails.some(e => e.cc_email === emailValue);
+            if(isDuplicate){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Duplicate Email',
+                    text: 'This email address is already added.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                elementInput.remove();
+                return;
+            }
             ticket.value.cc_emails.push({cc_email: emailValue});
         }
         elementInput.remove();

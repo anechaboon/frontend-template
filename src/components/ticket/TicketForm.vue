@@ -40,6 +40,7 @@
                                     label="Contact Email"
                                     type="email"
                                     autocomplete="email"
+                                    @blur="handleValidEmailFormat('contact_email')"
                                     :rules="[rules.required]"
                                 />
                             </v-col>
@@ -54,6 +55,7 @@
                                         :label="`CC Email ${index + 1}`"
                                         type="email"
                                         autocomplete="new-email"
+                                        @blur="handleValidEmailFormat('cc_emails', index)"
                                         class="ml-3"
                                     />
                                 </v-col>
@@ -213,7 +215,7 @@ import { createTicket } from '@/api/ticket.api';
 import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
 import { GLOBAL_PRIORITIES, TICKET_STATUS } from '@/constants/global.js';
-import { convertObjectToOptions, enumToOptions } from '@/utils/helper.js';
+import { convertObjectToOptions, enumToOptions, validateEmail } from '@/utils/helper.js';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 const ticketStatusOptions = enumToOptions(TICKET_STATUS)
@@ -290,6 +292,38 @@ const fetchServiceLines = async () => {
         )
     } 
 }
+
+const handleValidEmailFormat = (field, index = null) => {
+    let emailValue = '';
+
+    switch (field) {
+        case 'contact_email':
+            emailValue = ticket.value.contact_email;
+            break;
+        case 'cc_emails':
+            if (index !== null) {
+                emailValue = ticket.value.cc_emails[index];
+            }
+            break;
+        default:
+            return;
+    }
+
+    if (!validateEmail(emailValue)) {
+        if (field === 'contact_email') {
+            ticket.value.contact_email = '';
+        }
+        if (field === 'cc_emails' && index !== null) {
+            ticket.value.cc_emails[index] = '';
+        }
+        Swal.fire({
+            icon: 'error',
+            title: 'Invalid Email',
+            text: 'Please enter a valid email address.',
+            confirmButtonText: 'OK',
+        });
+    }
+};
 
 const handleSubmit = async () => {
     if (valid.value) {

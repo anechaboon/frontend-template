@@ -10,15 +10,20 @@
                                 <div class="d-flex align-center justify-space-between mb-2">
                                     <div>
                                         <h3 class="">Ticket</h3>
-                                        <div class="text-body-2 text-grey">
-                                            {{ ticket.title }}
+                                        <div class="d-flex text-body-2 text-grey">
+                                            <div id="ticket-title">
+                                                {{ ticket.title }}
+                                            </div>
                                             <v-btn
                                                 size="x-small"
                                                 icon
                                                 variant="text"
-                                                class="ml-1"
+                                                class="ml-1 pb-1"
                                             >
-                                                <v-icon size="14">ri-pencil-line</v-icon>
+                                                <v-icon size="14" @click="editTicketTitle">      
+                                                    {{ isEditTitle ? 'ri-check-line' : 'ri-pencil-line' }}
+                                                </v-icon>
+
                                             </v-btn>
                                         </div>
                                     </div>
@@ -30,38 +35,42 @@
 
 
                                 <v-row class="text-body-2 pt-3">
-                                    <v-col cols="2" class="py-3">
+                                    <v-col cols="3" class="py-3">
                                         <strong>Ticket Id:</strong>
                                     </v-col>
-                                    <v-col cols="10" class="py-3">
+                                    <v-col cols="9" class="py-3">
                                         <span class="text-warning ml-1">#{{ ticket.id }}</span>
                                     </v-col>
 
                                 </v-row>
 
                                 <v-row class="text-body-2 mt-0">
-                                    <v-col cols="2" class="py-3">
+                                    <v-col cols="3" class="py-3">
                                         <strong>Created:</strong>
                                     </v-col>
-                                    <v-col cols="10" class="py-3">
+                                    <v-col cols="9" class="py-3">
                                         <span class="ml-1">{{ moment(ticket.created_at).format('Y-m-d H:m') }}</span>
                                     </v-col>
                                 </v-row>
 
                                 <v-row class="text-body-2  mt-0">
-                                    <v-col cols="2" class="py-3">
+                                    <v-col cols="3" class="py-3">
                                         <strong>Contact:</strong>
                                     </v-col>
-                                    <v-col cols="10" class="py-3">
-                                        <div class="ml-1 text-body-2 text-grey">
-                                            {{ ticket.contact_email }}
+                                    <v-col cols="9" class="py-3">
+                                        <div class="d-flex ml-1 text-body-2 text-grey">
+                                            <div id="contact-email">
+                                                {{ ticket.contact_email }}
+                                            </div>
                                             <v-btn
                                                 size="x-small"
                                                 icon
                                                 variant="text"
                                                 class="ml-1"
                                             >
-                                                <v-icon size="14">ri-pencil-line</v-icon>
+                                                <v-icon size="14" @click="editContactEmail">
+                                                    {{ isEditContactEmail ? 'ri-check-line' : 'ri-pencil-line' }}
+                                                </v-icon>
                                             </v-btn>
                                         </div>
                                     </v-col>
@@ -69,40 +78,40 @@
 
                                 <v-row class="text-body-2 mt-0" align="start">
                                     <!-- Label -->
-                                    <v-col cols="12" md="2" class="py-3">
+                                    <v-col cols="12" md="3" class="py-3">
                                         <strong>Cc Email:</strong>
                                     </v-col>
 
-                                    <v-col cols="12" md="10" class="py-3">
-                                        <div class="d-flex flex-column">
-                                        <template v-for="(email, index) in ticket.cc_emails" :key="index">
-                                            <div class="d-flex align-center mb-1">
-                                            <v-chip
-                                                size="small"
-                                                color="primary"
-                                                variant="tonal"
-                                            >
-                                                {{ email.cc_email }}
-                                            </v-chip>
-                                            <v-btn
-                                                size="small"
-                                                variant="text"
-                                                class="my-0 mx-0 px-1 text-none"
-                                                @click="ticket.cc_emails.splice(index, 1)"
-                                            >
-                                                (remove)
-                                            </v-btn>
-                                            <v-btn
-                                                v-if="index === 0"
-                                                size="x-small"
-                                                icon
-                                                variant="text"
-                                                class="ml-1"
-                                            >
-                                                <v-icon size="14">ri-add-circle-line</v-icon>
-                                            </v-btn>
-                                            </div>
-                                        </template>
+                                    <v-col cols="12" md="9" class="py-3">
+                                        <div id="TicketCCEmails" class="d-flex flex-column">
+                                            <template v-for="(email, index) in ticket.cc_emails" :key="index">
+                                                <div class="d-flex align-center mb-1">
+                                                <v-chip
+                                                    size="small"
+                                                    color="primary"
+                                                    variant="tonal"
+                                                >
+                                                    {{ email.cc_email }}
+                                                </v-chip>
+                                                <v-btn
+                                                    size="small"
+                                                    variant="text"
+                                                    class="my-0 mx-0 px-1 text-none"
+                                                    @click="ticket.cc_emails.splice(index, 1)"
+                                                >
+                                                    (remove)
+                                                </v-btn>
+                                                <v-btn
+                                                    v-if="index === 0"
+                                                    size="x-small"
+                                                    icon
+                                                    variant="text"
+                                                    class="ml-1"
+                                                >
+                                                    <v-icon size="14" @click="handleAddCCEmail">ri-add-circle-line</v-icon>
+                                                </v-btn>
+                                                </div>
+                                            </template>
                                         </div>
                                     </v-col>
                                 </v-row>
@@ -253,6 +262,79 @@ import { getTicket } from '@/api/ticket.api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
 
+import { getCategories } from '@/api/category.api';
+import { getOrganizations } from '@/api/organization.api.js';
+import { getServiceLines } from '@/api/service-line.api.js';
+import { createTicket } from '@/api/ticket.api';
+import { getUsers } from '@/api/user.api.js';
+import { getVessels } from '@/api/vessel.api.js';
+import { convertObjectToOptions } from '@/utils/helper.js';
+
+const organizationOptions = ref([])
+const vesselOptions = ref([])
+const userOptions = ref([])
+const categoryOptions = ref([])
+const serviceLineOptions = ref([])
+
+const fetchOrganizations = async () => {
+    const { data } = await getOrganizations({ status: 'active' })
+    if (data.status) {
+        organizationOptions.value = convertObjectToOptions(
+            data.data,
+            'name'
+        )
+    } 
+}
+
+const fetchVessels = async () => {
+    const { data } = await getVessels({ status: 'active' })
+    if (data.status) {
+        vesselOptions.value = convertObjectToOptions(
+            data.data,
+            'name'
+        )
+    } 
+}
+
+const fetchUsers = async () => {
+    const { data } = await getUsers({ role: 'staff' })
+    if (data.status) {
+        let options = convertObjectToOptions(
+            data.data,
+            'full_name'
+        )
+        options.unshift({ title: 'Currently unassigned', value: null })
+        userOptions.value = options
+    } 
+}
+
+const fetchCategories = async () => {
+    const { data } = await getCategories({ status: 'active' })
+    if (data.status) {
+        categoryOptions.value = convertObjectToOptions(
+            data.data,
+            'name'
+        )
+    } 
+}
+
+const fetchServiceLines = async () => {
+    const { data } = await getServiceLines({ status: 'active' })
+    if (data.status) {
+        serviceLineOptions.value = convertObjectToOptions(
+            data.data,
+            'name'
+        )
+    } 
+}
+
+const handleSubmit = async () => {
+    if (valid.value) {
+        const res = await createTicket(ticket.value)
+        console.log('log:tag:res', res);
+    }
+}
+
 
 const ticket = ref({
     title: '',
@@ -280,6 +362,70 @@ const fetchTicketDetails = async (ticketId) => {
         loading.value = false;
     }
 }
+const isEditContactEmail = ref(false);
+const isEditTitle = ref(false);
+
+const ticketTitleTemp = ref('');
+
+const editTicketTitle = () => {
+    const ticketTitleDiv = document.getElementById('ticket-title');
+
+    if(!isEditTitle.value){
+        // switch to input text field for ticket title
+        const currentTitle = ticketTitleDiv.innerText;
+        ticketTitleDiv.innerHTML = `<input type="text" id="ticket-title-input" value="${currentTitle}" />`;
+        ticketTitleTemp.value = currentTitle;
+        // focus on the input field
+        document.getElementById('ticket-title-input').focus();
+
+    }else{
+        // switch back to text display
+        const inputField = document.getElementById('ticket-title-input');
+        const updatedTitle = inputField.value;
+        ticketTitleDiv.innerHTML = updatedTitle;
+        // update ticket title
+        ticket.value.title = updatedTitle;
+    }
+    isEditTitle.value = !isEditTitle.value;
+}
+
+const editContactEmail = () => {
+    const contactEmailDiv = document.getElementById('contact-email');
+
+    if(!isEditContactEmail.value){
+        // switch to input text field for contact email
+        const currentEmail = contactEmailDiv.innerText;
+        contactEmailDiv.innerHTML = `<input type="text" id="contact-email-input" value="${currentEmail}" />`;
+        // focus on the input field
+        document.getElementById('contact-email-input').focus();
+    }else{
+        // switch back to text display
+        const inputField = document.getElementById('contact-email-input');
+        const updatedEmail = inputField.value;
+        contactEmailDiv.innerHTML = updatedEmail;
+        // update ticket contact email
+        ticket.value.contact_email = updatedEmail;
+    }
+    isEditContactEmail.value = !isEditContactEmail.value;
+}
+
+const handleAddCCEmail = () => {
+
+    // add input field for cc email
+    const elementInput = document.createElement('input');
+    elementInput.type = 'text';
+    elementInput.placeholder = 'Enter CC Email';
+    elementInput.className = 'mb-2 w-50';
+    elementInput.onblur = () => {
+        const emailValue = elementInput.value;
+        if(emailValue){
+            ticket.value.cc_emails.push({cc_email: emailValue});
+        }
+        elementInput.remove();
+    };
+    document.getElementById('TicketCCEmails').appendChild(elementInput);
+    elementInput.focus();
+}
 
 onMounted(() => {
     // get ticket id from url
@@ -287,5 +433,24 @@ onMounted(() => {
     console.log('log:tag:ticketId', ticketId);
     // fetch ticket details
     fetchTicketDetails(ticketId);
+    fetchOrganizations()
+    fetchVessels()
+    fetchUsers()
+    fetchCategories()
+    fetchServiceLines()
 });
 </script>
+
+<style>
+    #contact-email{
+        min-width: 10rem;
+    }
+    #contact-email-input, #ticket-title-input {
+        width: -webkit-fill-available;
+        /* shadow */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px 8px;
+    }
+</style>

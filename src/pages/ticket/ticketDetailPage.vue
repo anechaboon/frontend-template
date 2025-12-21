@@ -7,7 +7,7 @@
                         <v-row>
                             <!-- LEFT -->
                             <v-col cols="12" md="9">
-                                <div class="d-flex align-center justify-space-between mb-2">
+                                <div class="d-flex align-center justify-space-between">
                                     <div>
                                         <h3 class="">Ticket</h3>
                                         <div class="d-flex text-body-2 text-grey">
@@ -27,36 +27,48 @@
                                         </div>
                                     </div>
 
-                                    <v-btn icon variant="text">
-                                        <v-icon class="text-h5" @click="showAlert" >ri-more-2-line</v-icon>
-                                    </v-btn>
+                                    <!-- XS only -->
+                                    <v-row class="pa-2 mb-4 pb-5 justify-end d-flex d-sm-none">
+                                        <v-col cols="auto">
+                                            <v-icon size="24">ri-coupon-2-line</v-icon>
+                                        </v-col>
+                                        </v-row>
+
+                                        <!-- SM and up -->
+                                        <v-row class="pa-2 mt-0 pt-0 pb-1 justify-end d-none d-sm-flex">
+                                        <v-col cols="auto">
+                                            <v-icon class="text-h5" @click="showAlert">
+                                                ri-more-2-line
+                                            </v-icon>
+                                        </v-col>
+                                    </v-row>
                                 </div>
 
 
                                 <v-row class="text-body-2 pt-3">
-                                    <v-col cols="3" sm="4" class="py-3">
+                                    <v-col sm="4" md="4" lg="3" class="py-3">
                                         <strong>Ticket Id:</strong>
                                     </v-col>
-                                    <v-col cols="9" sm="8" class="py-3">
+                                    <v-col sm="8" md="8" lg="9" class="py-3">
                                         <span class="text-warning ml-1">#{{ ticket.id }}</span>
                                     </v-col>
 
                                 </v-row>
 
                                 <v-row class="text-body-2 mt-0">
-                                    <v-col cols="3" sm="4" class="py-3">
+                                    <v-col sm="4" md="4" lg="3" class="py-3">
                                         <strong>Created:</strong>
                                     </v-col>
-                                    <v-col cols="9" sm="8" class="py-3">
+                                    <v-col sm="8" md="8" lg="9" class="py-3">
                                         <span class="ml-1">{{ moment(ticket.created_at).format('Y-m-d H:m') }}</span>
                                     </v-col>
                                 </v-row>
 
                                 <v-row class="text-body-2  mt-0">
-                                    <v-col cols="3" sm="4" class="py-3">
+                                    <v-col sm="4" md="4" lg="3" class="py-3">
                                         <strong>Contact:</strong>
                                     </v-col>
-                                    <v-col cols="9" sm="8" class="py-3">
+                                    <v-col sm="8" md="8" lg="9" class="py-3">
                                         <div class="d-flex ml-1 text-body-2 text-grey">
                                             <div id="contact-email">
                                                 {{ ticket.contact_email }}
@@ -77,44 +89,37 @@
 
                                 <v-row class="text-body-2 mt-0" align="start">
                                     <!-- Label -->
-                                    <v-col cols="3" sm="12" class="py-3">
+                                    <v-col sm="4" md="4" lg="3" class="pt-1">
                                         <strong>Cc Email:</strong>
                                     </v-col>
 
-                                    <v-col cols="9" sm="12" class="py-3">
-                                        <div id="TicketCCEmails" class="d-flex flex-column">
-                                            <template v-for="(email, index) in ticket.cc_emails" :key="index">
-                                                <div class="d-flex align-center mb-1">
-                                                <v-chip
-                                                    size="small"
-                                                    color="primary"
-                                                    variant="tonal"
-                                                >
-                                                    {{ email.cc_email }}
-                                                </v-chip>
-                                                <v-btn
-                                                    size="small"
-                                                    variant="text"
-                                                    class="my-0 mx-0 px-1 text-none"
-                                                    @click="ticket.cc_emails.splice(index, 1)"
-                                                >
-                                                    (remove)
-                                                </v-btn>
-                                                <v-btn
-                                                    v-if="index === 0"
-                                                    size="x-small"
-                                                    icon
-                                                    variant="text"
-                                                    class="ml-1"
-                                                >
-                                                    <v-icon size="14" @click="handleAddCCEmail">ri-add-circle-line</v-icon>
-                                                </v-btn>
-                                                </div>
-                                            </template>
+                                    <!-- Content -->
+                                    <v-col sm="8" md="8" lg="9">
+                                        <div class="d-flex flex-column">
+                                        <template v-for="(email, index) in ticket.cc_emails" :key="index">
+                                            <div class="d-flex align-center mb-1">
+                                            <v-chip
+                                                size="small"
+                                                color="primary"
+                                                variant="tonal"
+                                            >
+                                                {{ email.cc_email }}
+                                            </v-chip>
+
+                                            <v-btn
+                                                v-if="index === 0"
+                                                size="x-small"
+                                                icon
+                                                variant="text"
+                                                class="ml-1"
+                                            >
+                                                <v-icon size="14">ri-add-circle-line</v-icon>
+                                            </v-btn>
+                                            </div>
+                                        </template>
                                         </div>
                                     </v-col>
                                 </v-row>
-
 
                                 <p class="text-body-2 text-grey mt-3">
                                 {{ ticket.description }}
@@ -122,50 +127,48 @@
                             </v-col>
 
                             <!-- RIGHT -->
-                            <v-col cols="12" md="3" class="d-flex flex-column align-center right-panel border-s">
-
-                                <div class="mb-6 d-flex align-center w-100">
-                                    <v-spacer />
+                            <v-col cols="12" md="3" class="d-flex flex-column right-panel border-s">
+                                <!-- Coupon Icon -->
+                                <v-row
+                                    class="pa-2 mb-4 pb-5 justify-end d-none d-sm-flex"
+                                    style="max-height: 6rem;"
+                                >
+                                    <v-col cols="auto">
                                     <v-icon size="24">ri-coupon-2-line</v-icon>
+                                    </v-col>
+                                </v-row>
+
+                                <!-- Priority -->
+                                <div class="text-center mb-6">
+                                    <div class="text-h5 font-weight-bold"
+                                        :style="{ color: PRIORITY_COLORS[ticket.priority] }">
+                                    {{ ticket.priority }}
+                                    </div>
+                                    <div class="text-caption text-grey">
+                                    ticket priority
+                                    </div>
                                 </div>
 
-                                <div class="text-center mb-6 align-center">
-                                    <div class="d-flex align-center">
-                                        <div class="text-h5 font-weight-bold float-start" :style="{ color: PRIORITY_COLORS[ticket.priority] }">
-                                            {{ ticket.priority }}
-                                        </div>
-                                    </div>
-                                    <div class="d-flex">
-                                        <div class="text-caption text-grey">
-                                            ticket priority
-                                        </div>
-                                    </div>
-                                </div>
-
+                                <!-- Time Remaining -->
                                 <div class="text-center mb-6 mt-auto">
-                                    <div class="d-flex align-center">
-                                        <div class="font-weight-bold float-start">
-                                            11h 30min
-                                        </div>
+                                    <div class="font-weight-bold">
+                                    11h 30min
                                     </div>
-                                    <div class="d-flex">
-                                        <div class="text-caption text-grey">
-                                            time remaining
-                                        </div>
+                                    <div class="text-caption text-grey">
+                                    time remaining
                                     </div>
                                 </div>
                             </v-col>
-
                         </v-row>
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="3">
                     <v-card outlined class="pa-2 mb-4 pb-5" min-height="335">
                         <v-row class="px-3 py-1 mt-0 align-center mb-1">
-                            <v-col cols="12" md="7" class="px-1 py-1">
+                            <v-col md="7" sm="10" class="px-1 py-1">
                                 <h3>Organization</h3>
                             </v-col>
-                            <v-col cols="12" md="5" class="px-1 py-1 text-right">
+                            <v-col md="5" sm="2" class="px-1 py-1 text-right">
                                 <v-icon size="24">ri-anchor-line</v-icon>
                             </v-col>
                         </v-row>
@@ -207,10 +210,10 @@
                 <v-col cols="12" md="3">
                     <v-card outlined class="pa-2 mb-4 pb-5" min-height="335">
                         <v-row class="px-3 py-1 mt-0 align-center mb-1">
-                            <v-col cols="12" md="7" class="px-1 py-1">
+                            <v-col md="7" sm="10" class="px-1 py-1">
                                 <h3>Category</h3>
                             </v-col>
-                            <v-col cols="12" md="5" class="px-1 py-1 text-right">
+                            <v-col md="5" sm="2" class="px-1 py-1 text-right">
                                 <v-icon size="24">ri-git-repository-private-fill</v-icon>
                             </v-col>
                         </v-row>
@@ -403,7 +406,6 @@ const fetchTicketDetails = async (ticketId) => {
     try {
         const res = await getTicket(ticketId);
         ticket.value = res.data.data;
-        console.log('log:tag:ticket', ticket);
     } finally {
         loading.value = false;
     }
@@ -484,7 +486,6 @@ const showAlert = () => {
 onMounted(() => {
     // get ticket id from url
     const ticketId = window.location.pathname.split('/').pop();
-    console.log('log:tag:ticketId', ticketId);
     // fetch ticket details
     fetchTicketDetails(ticketId);
     fetchOrganizations()

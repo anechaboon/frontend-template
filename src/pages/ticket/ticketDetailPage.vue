@@ -123,7 +123,7 @@
                             </v-col>
 
                             <!-- RIGHT -->
-                            <v-col cols="12" md="3" class="d-flex flex-column align-center right-panel">
+                            <v-col cols="12" md="3" class="d-flex flex-column align-center right-panel border-s">
 
                                 <div class="mb-6 d-flex align-center w-100">
                                     <v-spacer />

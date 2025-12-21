@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { deleteTicket, getTicket, getTickets } from '@/api/ticket.api';
+import { deleteTicket, getTickets } from '@/api/ticket.api';
 import TicketForm from '@/components/ticket/TicketForm.vue';
 import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
@@ -133,14 +133,8 @@ const saveTicket = async (ticket) => {
 }
 
 const editTicket = async (ticket) => {
-    loading.value = true
-    try {
-        const res = await getTicket(ticket.id)
-        editingTicket.value = res.data.data
-        dialog.value = true
-    } finally {
-        loading.value = false
-    }
+    // go to ticket detail page
+    window.location.href = `/ticket/${ticket.id}`
 }
 
 const deleteVes = (ticket) => {

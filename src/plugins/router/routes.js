@@ -19,6 +19,11 @@ export const routes = [
         component: () => import('@/pages/ticket/ticketFormPage.vue'),
         meta: { requiresAuth: true },
       },
+      {
+        path: '/ticket/:id',
+        component: () => import('@/pages/ticket/ticketDetailPage.vue'),
+        meta: { requiresAuth: true },
+      }
     ],
   },
   { 

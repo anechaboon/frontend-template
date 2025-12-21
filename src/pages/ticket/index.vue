@@ -61,7 +61,7 @@
 <script setup>
 import { deleteTicket, getTickets } from '@/api/ticket.api';
 import TicketForm from '@/components/ticket/TicketForm.vue';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 
 const dialog = ref(false)
@@ -116,7 +116,7 @@ const editTicket = async (ticket) => {
 }
 
 const deleteVes = (ticket) => {
-    Swal.fire({
+    swal.fire({
         title: 'Are you sure?',
         text: `Do you want to delete ticket "${ticket.title}"?`,
         icon: 'warning',
@@ -133,12 +133,12 @@ const deleteVes = (ticket) => {
                 const res = await deleteTicket(ticket.id)
                 if (res.status === 200 && res.data.status) {
                     await fetchTickets()
-                    Swal.fire('Deleted!', 'The ticket has been deleted.', 'success')
+                    swal.fire('Deleted!', 'The ticket has been deleted.', 'success')
                 } else {
-                    Swal.fire('Error!', 'Failed to delete the ticket.', 'error')
+                    swal.fire('Error!', 'Failed to delete the ticket.', 'error')
                 }
             } catch (error) {
-                Swal.fire('Error!', 'An error occurred while deleting the ticket.', 'error')
+                swal.fire('Error!', 'An error occurred while deleting the ticket.', 'error')
             }
         }
     })

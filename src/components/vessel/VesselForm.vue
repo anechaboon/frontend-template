@@ -5,7 +5,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         v-model="vessel.name"
-                        label="Vessel Name"
+                        label="Vessel Name*"
                         :rules="[rules.required]"
                         required
                     ></v-text-field>
@@ -13,7 +13,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         v-model="vessel.imo_number"
-                        label="IMO Number"
+                        label="IMO Number*"
                         :rules="[rules.required]"
                         required
                     ></v-text-field>
@@ -25,24 +25,15 @@
                     <v-select
                         v-model="vessel.type"
                         :items="vesselTypes"
-                        label="Vessel Type"
+                        label="Vessel Type*"
                         :rules="[rules.required]"
                     ></v-select>
                 </v-col>
                 <v-col cols="12" md="6">
-                    <v-text-field
-                        v-model="vessel.flag"
-                        label="Flag"
-                    ></v-text-field>
-                </v-col>
-            </v-row>
-
-            <v-row>
-                <v-col cols="12" md="6">
                     <v-select
                         v-model="vessel.status"
                         :items="globalStatusOptions"
-                        label="Status"
+                        label="Status*"
                         :rules="[rules.required]"
                         required
                     ></v-select>
@@ -66,6 +57,7 @@
 <script setup>
 import { GLOBAL_STATUS } from '@/constants/global.js';
 import { enumToOptions } from '@/utils/helper.js';
+import swal from '@/utils/swal';
 import { ref } from 'vue';
 
 const globalStatusOptions = enumToOptions(GLOBAL_STATUS)
@@ -95,6 +87,22 @@ const rules = {
 const emit = defineEmits(['submit', 'cancel'])
 
 const handleSubmit = () => {
+
+    // valid imo_number can use number only
+    if (!/^\d*$/.test(props.vessel.imo_number)) {
+        swal.fire({
+            icon: 'error',
+            title: 'Invalid IMO Number',
+            text: 'IMO Number must contain numbers only.',
+            customClass: {
+                container: 'swal2-vuetify',
+                confirmButton: 'my-custom-confirm-btn',
+                cancelButton: 'my-custom-cancel-btn'
+            }
+        });
+        return;
+    }
+
     if (valid.value) {
         emit('submit', props.vessel)
     }
@@ -104,6 +112,3 @@ const handleCancel = () => {
     emit('cancel')
 }
 </script>
-
-<style scoped>
-</style>

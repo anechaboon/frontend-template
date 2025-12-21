@@ -1,8 +1,9 @@
-import { createApp } from 'vue'
 import App from '@/App.vue'
 import { registerPlugins } from '@core/utils/plugins'
+import { createApp } from 'vue'
 
 // Styles
+import '@/assets/styles/styles.scss'
 import '@core/scss/template/index.scss'
 import '@layouts/styles/index.scss'
 

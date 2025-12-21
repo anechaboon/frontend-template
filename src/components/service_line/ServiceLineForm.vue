@@ -5,7 +5,7 @@
                 <v-col cols="12">
                     <v-text-field
                         v-model="serviceLine.name"
-                        label="Service Line Name"
+                        label="Service Line Name*"
                         :rules="[rules.required]"
                         required
                     ></v-text-field>
@@ -14,7 +14,6 @@
                     <v-textarea
                         v-model="serviceLine.description"
                         label="Description"
-                        :rules="[rules.required]"
                         rows="3"
                         required
                     ></v-textarea>
@@ -22,7 +21,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         v-model="serviceLine.service_code"
-                        label="Service Code"
+                        label="Service Code*"
                         :rules="[rules.required]"
                         required
                     ></v-text-field>
@@ -31,7 +30,7 @@
                     <v-select
                         v-model="serviceLine.status"
                         :items="globalStatusOptions"
-                        label="Status"
+                        label="Status*"
                         :rules="[rules.required]"
                         required
                     ></v-select>
@@ -66,11 +65,9 @@ const props = defineProps({
     }
 })
 
-
 const rules = {
     required: value => !!value || 'This field is required'
 }
-
 
 const emit = defineEmits(['submit', 'cancel'])
 

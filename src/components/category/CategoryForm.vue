@@ -5,7 +5,7 @@
                 <v-col cols="12">
                     <v-text-field
                         v-model="category.name"
-                        label="Category Name"
+                        label="Category Name*"
                         :rules="[rules.required]"
                         required
                     ></v-text-field>
@@ -14,7 +14,6 @@
                     <v-textarea
                         v-model="category.description"
                         label="Description"
-                        :rules="[rules.required]"
                         rows="3"
                         required
                     ></v-textarea>
@@ -23,7 +22,7 @@
                     <v-select
                         v-model="category.status"
                         :items="globalStatusOptions"
-                        label="Status"
+                        label="Status*"
                         :rules="[rules.required]"
                         required
                     ></v-select>

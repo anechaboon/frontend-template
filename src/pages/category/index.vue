@@ -61,7 +61,7 @@
 
 <script setup>
 import { createCategory, deleteCategory, getCategories, getCategory, updateCategory } from '@/api/category.api';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 
 const dialog = ref(false)
@@ -140,7 +140,7 @@ const editCategory = async (category) => {
 }
 
 const deleteCate = (category) => {
-    Swal.fire({
+    swal.fire({
         title: 'Are you sure?',
         text: `Do you want to delete Category "${category.name}"?`,
         icon: 'warning',
@@ -157,12 +157,12 @@ const deleteCate = (category) => {
                 const res = await deleteCategory(category.id)
                 if (res.status === 200 && res.data.status) {
                     await fetchCategories()
-                    Swal.fire('Deleted!', 'The Category has been deleted.', 'success')
+                    swal.fire('Deleted!', 'The Category has been deleted.', 'success')
                 } else {
-                    Swal.fire('Error!', 'Failed to delete the Category.', 'error')
+                    swal.fire('Error!', 'Failed to delete the Category.', 'error')
                 }
             } catch (error) {
-                Swal.fire('Error!', 'An error occurred while deleting the Category.', 'error')
+                swal.fire('Error!', 'An error occurred while deleting the Category.', 'error')
             }
         }
     })

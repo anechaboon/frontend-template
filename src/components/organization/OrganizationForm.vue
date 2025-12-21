@@ -24,7 +24,7 @@
                 <v-col cols="12" md="6">
                     <v-text-field
                         v-model="organization.phone"
-                        label="Phone"
+                        label="Phone*"
                         :rules="[rules.phone]"
                     ></v-text-field>
                 </v-col>
@@ -62,7 +62,7 @@
                     <v-select
                         v-model="organization.status"
                         :items="globalStatusOptions"
-                        label="Status"
+                        label="Status*"
                         :rules="[rules.required]"
                         required
                     ></v-select>

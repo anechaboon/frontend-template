@@ -297,7 +297,7 @@ import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
 import { PRIORITY_COLORS, TICKET_STATUS } from '@/constants/global.js';
 import { convertObjectToOptions, enumToOptions, validateEmail } from '@/utils/helper.js';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 
 const organizationOptions = ref([])
 const vesselOptions = ref([])
@@ -371,7 +371,7 @@ const handleSubmit = async () => {
     if (valid.value) {
         const res = await updateTicket(ticket.value.id, ticket.value)
         if (res.data.status) {
-            Swal.fire({
+            swal.fire({
                 icon: 'success',
                 title: 'Success',
                 text: 'Ticket updated successfully',
@@ -379,7 +379,7 @@ const handleSubmit = async () => {
                 showConfirmButton: false
             })
         } else {
-            Swal.fire({
+            swal.fire({
                 icon: 'error',
                 title: 'Error',
                 text: 'Failed to update ticket',
@@ -481,7 +481,7 @@ const handleAddCCEmail = () => {
         if(emailValue){
             // validate email format
             if(!validateEmail(emailValue)){
-                Swal.fire({
+                swal.fire({
                     icon: 'error',
                     title: 'Invalid Email',
                     text: 'Please enter a valid email address.',
@@ -494,7 +494,7 @@ const handleAddCCEmail = () => {
             // check for duplicate email
             const isDuplicate = ticket.value.cc_emails.some(e => e.cc_email === emailValue);
             if(isDuplicate){
-                Swal.fire({
+                swal.fire({
                     icon: 'error',
                     title: 'Duplicate Email',
                     text: 'This email address is already added.',
@@ -513,7 +513,7 @@ const handleAddCCEmail = () => {
 }
 
 const showAlert = () => {
-    Swal.fire({
+    swal.fire({
         title: 'More options coming soon!',
         icon: 'info',
         timer: 2000,

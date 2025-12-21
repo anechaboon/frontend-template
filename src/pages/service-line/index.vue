@@ -61,7 +61,7 @@
 
 <script setup>
 import { createServiceLine, deleteServiceLine, getServiceLine, getServiceLines, updateServiceLine } from '@/api/service-line.api';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 
 const dialog = ref(false)
@@ -141,7 +141,7 @@ const editServiceLine = async (serviceLine) => {
 }
 
 const deleteSerLine = (serviceLine) => {
-    Swal.fire({
+    swal.fire({
         title: 'Are you sure?',
         text: `Do you want to delete service line "${serviceLine.name}"?`,
         icon: 'warning',
@@ -158,12 +158,12 @@ const deleteSerLine = (serviceLine) => {
                 const res = await deleteServiceLine(serviceLine.id)
                 if (res.status === 200 && res.data.status) {
                     await fetchServiceLines()
-                    Swal.fire('Deleted!', 'The service line has been deleted.', 'success')
+                    swal.fire('Deleted!', 'The service line has been deleted.', 'success')
                 } else {
-                    Swal.fire('Error!', 'Failed to delete the service line.', 'error')
+                    swal.fire('Error!', 'Failed to delete the service line.', 'error')
                 }
             } catch (error) {
-                Swal.fire('Error!', 'An error occurred while deleting the service line.', 'error')
+                swal.fire('Error!', 'An error occurred while deleting the service line.', 'error')
             }
         }
     })

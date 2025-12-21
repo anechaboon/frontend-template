@@ -15,7 +15,7 @@
                                 <!-- Title -->
                                 <v-text-field
                                     v-model="ticket.title"
-                                    label="Title"
+                                    label="Title*"
                                     :rules="[rules.required]"
                                     required
                                 ></v-text-field>
@@ -25,7 +25,7 @@
                                 <v-select
                                     v-model="ticket.priority"
                                     :items="globalPriorityOptions"
-                                    label="Priority"
+                                    label="Priority*"
                                     :rules="[rules.required]"
                                     required
                                 ></v-select>
@@ -37,7 +37,7 @@
                                 <!-- Email -->
                                 <v-text-field
                                     v-model="ticket.contact_email"
-                                    label="Contact Email"
+                                    label="Contact Email*"
                                     type="email"
                                     autocomplete="email"
                                     @blur="handleValidEmailFormat('contact_email')"
@@ -113,6 +113,7 @@
                                 ></v-select>
                             </v-col>
                         </v-row>
+
                         <!-- Vessel -->
                         <v-row class="px-3 py-1 mt-0">
                             <v-col cols="12" md="12" class="px-1">
@@ -120,14 +121,14 @@
                                 <v-select
                                     v-model="ticket.vessel_id"
                                     :items="vesselOptions"
-                                    label="Vessel"
+                                    label="Vessel*"
                                     :rules="[rules.required]"
                                     required
                                 ></v-select>
                             </v-col>
                         </v-row>
+
                         <!-- Assigned To -->
-                        <!-- Description -->
                         <v-row class="px-3 py-1 mt-0">
                             <v-col cols="12" md="12" class="px-1">
                                 <v-select
@@ -155,7 +156,8 @@
                                 <v-select
                                     v-model="ticket.category_id"
                                     :items="categoryOptions"
-                                    label="Category"
+                                    label="Category*"
+                                    :rules="[rules.required]"
                                     required
                                 ></v-select>
                             </v-col>
@@ -167,7 +169,7 @@
                                 <v-select
                                     v-model="ticket.status"
                                     :items="ticketStatusOptions"
-                                    label="Status"
+                                    label="Status*"
                                     :rules="[rules.required]"
                                     required
                                 ></v-select>
@@ -216,7 +218,7 @@ import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
 import { GLOBAL_PRIORITIES, TICKET_STATUS } from '@/constants/global.js';
 import { convertObjectToOptions, enumToOptions, validateEmail } from '@/utils/helper.js';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 const ticketStatusOptions = enumToOptions(TICKET_STATUS)
 const globalPriorityOptions = [{ title: 'Please Select', value: null }, ...enumToOptions(GLOBAL_PRIORITIES)]
@@ -316,7 +318,7 @@ const handleValidEmailFormat = (field, index = null) => {
         if (field === 'cc_emails' && index !== null) {
             ticket.value.cc_emails[index] = '';
         }
-        Swal.fire({
+        swal.fire({
             icon: 'error',
             title: 'Invalid Email',
             text: 'Please enter a valid email address.',
@@ -329,7 +331,7 @@ const handleSubmit = async () => {
     if (valid.value) {
         const res = await createTicket(ticket.value)
         if (res.data.status) {
-            Swal.fire({
+            swal.fire({
                 title: 'Ticket created successfully!',
                 icon: 'success',
                 timer: 2000,
@@ -338,7 +340,7 @@ const handleSubmit = async () => {
                 window.location.href = `/ticket/${res.data.data.id}`
             })
         } else {
-            Swal.fire({
+            swal.fire({
                 title: 'Error creating ticket',
                 text: res.data.message || 'Please try again later.',
                 icon: 'error',

@@ -62,7 +62,7 @@
 <script setup>
 import { createVessel, deleteVessel, getVessel, getVessels, updateVessel } from '@/api/vessel.api';
 import VesselForm from '@/components/vessel/VesselForm.vue';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 
 const dialog = ref(false)
@@ -76,7 +76,6 @@ const headers = [
     { title: 'Vessel Name', key: 'name', sortable: true },
     { title: 'IMO Number', key: 'imo_number', sortable: true },
     { title: 'Type', key: 'type', sortable: true },
-    { title: 'Flag', key: 'flag', sortable: true },
     { title: 'Status', key: 'status', sortable: true },
     { title: 'Actions', key: 'actions', sortable: false, align: 'center' }
 ]
@@ -108,7 +107,7 @@ const addVessel = () => {
     editingVessel.value = {
         name: '',
         imo_number: '',
-        type: '',
+        type: null,
         flag: '',
         status: 'active'
     }
@@ -143,7 +142,7 @@ const editVessel = async (vessel) => {
 }
 
 const deleteVes = (vessel) => {
-    Swal.fire({
+    swal.fire({
         title: 'Are you sure?',
         text: `Do you want to delete vessel "${vessel.name}"?`,
         icon: 'warning',
@@ -160,12 +159,12 @@ const deleteVes = (vessel) => {
                 const res = await deleteVessel(vessel.id)
                 if (res.status === 200 && res.data.status) {
                     await fetchVessels()
-                    Swal.fire('Deleted!', 'The vessel has been deleted.', 'success')
+                    swal.fire('Deleted!', 'The vessel has been deleted.', 'success')
                 } else {
-                    Swal.fire('Error!', 'Failed to delete the vessel.', 'error')
+                    swal.fire('Error!', 'Failed to delete the vessel.', 'error')
                 }
             } catch (error) {
-                Swal.fire('Error!', 'An error occurred while deleting the vessel.', 'error')
+                swal.fire('Error!', 'An error occurred while deleting the vessel.', 'error')
             }
         }
     })

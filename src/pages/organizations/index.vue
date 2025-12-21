@@ -62,7 +62,7 @@
 <script setup>
 import { createOrganization, deleteOrganization, getOrganization, getOrganizations, updateOrganization } from '@/api/organization.api';
 import OrganizationForm from '@/components/organization/OrganizationForm.vue';
-import Swal from 'sweetalert2';
+import swal from '@/utils/swal';
 import { onMounted, ref } from 'vue';
 
 const dialog = ref(false)
@@ -148,7 +148,7 @@ const editOrganization = async (organization) => {
 }
 
 const deleteVes = (organization) => {
-    Swal.fire({
+    swal.fire({
         title: 'Are you sure?',
         text: `Do you want to delete organization "${organization.name}"?`,
         icon: 'warning',
@@ -165,12 +165,12 @@ const deleteVes = (organization) => {
                 const res = await deleteOrganization(organization.id)
                 if (res.status === 200 && res.data.status) {
                     await fetchOrganizations()
-                    Swal.fire('Deleted!', 'The organization has been deleted.', 'success')
+                    swal.fire('Deleted!', 'The organization has been deleted.', 'success')
                 } else {
-                    Swal.fire('Error!', 'Failed to delete the organization.', 'error')
+                    swal.fire('Error!', 'Failed to delete the organization.', 'error')
                 }
             } catch (error) {
-                Swal.fire('Error!', 'An error occurred while deleting the organization.', 'error')
+                swal.fire('Error!', 'An error occurred while deleting the organization.', 'error')
             }
         }
     })

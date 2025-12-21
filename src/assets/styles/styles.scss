@@ -1,1 +1,10 @@
 // Write your overrides
+.swal2-container {
+    z-index: 3000 !important;
+}
+.my-custom-confirm-btn {
+    color: #ffffff !important;
+}
+.my-custom-cancel-btn {
+    color: #ffffff !important;
+}

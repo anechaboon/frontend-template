@@ -1,6 +1,10 @@
 <template>
     <v-container fluid>
         <v-card>
+            <v-card-title class="d-flex justify-space-between align-center">
+                <span class="text-h5 bg-color-">Ticket List</span>
+                <v-btn color="primary" @click="handleGoToAddTicket">Add Ticket</v-btn>
+            </v-card-title>
             <v-card-text>
                 <v-text-field
                     v-model="search"
@@ -101,35 +105,9 @@ const fetchTickets = async () => {
     }
 }
 
-const addTicket = () => {
-    loading.value = true
-    editingTicket.value = {
-        title: '',
-        description: '',
-        contact_email: '',
-        priority: null,
-        organization_id: null,
-        vessel_id: null,
-        service_line_id: null,
-        status: 'open'
-    }
-    dialog.value = true
-    loading.value = false
-
-}
-
-const saveTicket = async (ticket) => {
-    let res = {}
-    if (!ticket.id){
-        res = await createTicket(ticket)
-    } else {
-        res = await updateTicket(ticket.id, ticket)
-    }
-
-    if (res.status === 200 && res.data.status) {
-        await fetchTickets()
-    } 
-    dialog.value = false
+const handleGoToAddTicket = () => {
+    // go to ticket create page
+    window.location.href = '/tickets/add'
 }
 
 const editTicket = async (ticket) => {

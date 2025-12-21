@@ -34,29 +34,29 @@
 
 
                                 <v-row class="text-body-2 pt-3">
-                                    <v-col cols="3" class="py-3">
+                                    <v-col cols="3" sm="4" class="py-3">
                                         <strong>Ticket Id:</strong>
                                     </v-col>
-                                    <v-col cols="9" class="py-3">
+                                    <v-col cols="9" sm="8" class="py-3">
                                         <span class="text-warning ml-1">#{{ ticket.id }}</span>
                                     </v-col>
 
                                 </v-row>
 
                                 <v-row class="text-body-2 mt-0">
-                                    <v-col cols="3" class="py-3">
+                                    <v-col cols="3" sm="4" class="py-3">
                                         <strong>Created:</strong>
                                     </v-col>
-                                    <v-col cols="9" class="py-3">
+                                    <v-col cols="9" sm="8" class="py-3">
                                         <span class="ml-1">{{ moment(ticket.created_at).format('Y-m-d H:m') }}</span>
                                     </v-col>
                                 </v-row>
 
                                 <v-row class="text-body-2  mt-0">
-                                    <v-col cols="3" class="py-3">
+                                    <v-col cols="3" sm="4" class="py-3">
                                         <strong>Contact:</strong>
                                     </v-col>
-                                    <v-col cols="9" class="py-3">
+                                    <v-col cols="9" sm="8" class="py-3">
                                         <div class="d-flex ml-1 text-body-2 text-grey">
                                             <div id="contact-email">
                                                 {{ ticket.contact_email }}
@@ -77,11 +77,11 @@
 
                                 <v-row class="text-body-2 mt-0" align="start">
                                     <!-- Label -->
-                                    <v-col cols="12" md="3" class="py-3">
+                                    <v-col cols="3" sm="12" class="py-3">
                                         <strong>Cc Email:</strong>
                                     </v-col>
 
-                                    <v-col cols="12" md="9" class="py-3">
+                                    <v-col cols="9" sm="12" class="py-3">
                                         <div id="TicketCCEmails" class="d-flex flex-column">
                                             <template v-for="(email, index) in ticket.cc_emails" :key="index">
                                                 <div class="d-flex align-center mb-1">

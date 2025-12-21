@@ -176,7 +176,7 @@
                                 <!-- Organization -->
                                 <v-label class="mb-1">Organization</v-label>
                                 <v-select
-                                    v-model="ticket.organization.name"
+                                    v-model="ticket.organization_id"
                                     :items="organizationOptions"
                                 ></v-select>
                             </v-col>
@@ -187,7 +187,7 @@
                                 <!-- Vessel -->
                                 <v-label class="mb-1">Vessel</v-label>
                                 <v-select
-                                    v-model="ticket.vessel.name"
+                                    v-model="ticket.vessel_id"
                                     :items="vesselOptions"
                                 ></v-select>
                             </v-col>
@@ -197,7 +197,7 @@
                             <v-col cols="12" md="12" class="px-1 py-2">
                                 <v-label class="mb-1">Assigned To</v-label>
                                 <v-select
-                                    v-model="ticket.assigned_to_user_name"
+                                    v-model="ticket.assigned_to_user_id"
                                     :items="userOptions"
                                 ></v-select>
                                 
@@ -221,7 +221,7 @@
                                 <!-- Category -->
                                 <v-label class="mb-1">Category</v-label>
                                 <v-select
-                                    v-model="ticket.category.name"
+                                    v-model="ticket.category_id"
                                     :items="categoryOptions"
                                 ></v-select>
                             </v-col>
@@ -242,13 +242,26 @@
                             <v-col cols="12" md="12" class="px-1 py-2">
                                 <v-label class="mb-1">Service Line</v-label>
                                 <v-select
-                                    v-model="ticket.service_line.name"
+                                    v-model="ticket.service_line_id"
                                     :items="serviceLineOptions"
                                 ></v-select>
                                 
                             </v-col>
                         </v-row>
                     </v-card>
+                </v-col>
+            </v-row>
+            <v-row class="mt-0">
+                <v-col cols="12" class="px-3">
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="primary" @click="handleSubmit" :disabled="!valid">
+                            Submit
+                        </v-btn>
+                        <v-btn color="grey" variant="text"  @click="handleReset">
+                            Reset
+                        </v-btn>
+                    </v-card-actions>
                 </v-col>
             </v-row>
         </v-container>
@@ -265,16 +278,18 @@ import { onMounted, ref } from 'vue';
 import { getCategories } from '@/api/category.api';
 import { getOrganizations } from '@/api/organization.api.js';
 import { getServiceLines } from '@/api/service-line.api.js';
-import { createTicket } from '@/api/ticket.api';
+import { updateTicket } from '@/api/ticket.api';
 import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
 import { convertObjectToOptions } from '@/utils/helper.js';
+import Swal from 'sweetalert2';
 
 const organizationOptions = ref([])
 const vesselOptions = ref([])
 const userOptions = ref([])
 const categoryOptions = ref([])
 const serviceLineOptions = ref([])
+const valid = ref(false)
 
 const fetchOrganizations = async () => {
     const { data } = await getOrganizations({ status: 'active' })
@@ -330,8 +345,24 @@ const fetchServiceLines = async () => {
 
 const handleSubmit = async () => {
     if (valid.value) {
-        const res = await createTicket(ticket.value)
-        console.log('log:tag:res', res);
+        const res = await updateTicket(ticket.value.id, ticket.value)
+        if (res.data.status) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Ticket updated successfully',
+                timer: 2000,
+                showConfirmButton: false
+            })
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update ticket',
+                timer: 2000,
+                showConfirmButton: false
+            })
+        }
     }
 }
 
@@ -342,9 +373,17 @@ const ticket = ref({
     contact_email: '',
     cc_emails: [''],
     priority: null,
+    
+    organization_id: null,
     organization: {name: ''},
+    
+    vessel_id: null,
     vessel: {name: ''},
+    
+    service_line_id: null,
     service_line: {name: ''},
+    
+    category_id: null,
     category: {name: ''},
 
     assigned_to_user_id: null,

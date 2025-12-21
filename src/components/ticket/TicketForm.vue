@@ -214,6 +214,7 @@ import { getUsers } from '@/api/user.api.js';
 import { getVessels } from '@/api/vessel.api.js';
 import { GLOBAL_PRIORITIES, TICKET_STATUS } from '@/constants/global.js';
 import { convertObjectToOptions, enumToOptions } from '@/utils/helper.js';
+import Swal from 'sweetalert2';
 import { onMounted, ref } from 'vue';
 const ticketStatusOptions = enumToOptions(TICKET_STATUS)
 const globalPriorityOptions = [{ title: 'Please Select', value: null }, ...enumToOptions(GLOBAL_PRIORITIES)]
@@ -293,7 +294,23 @@ const fetchServiceLines = async () => {
 const handleSubmit = async () => {
     if (valid.value) {
         const res = await createTicket(ticket.value)
-        console.log('log:tag:res', res);
+        if (res.data.status) {
+            Swal.fire({
+                title: 'Ticket created successfully!',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = `/ticket/${res.data.data.id}`
+            })
+        } else {
+            Swal.fire({
+                title: 'Error creating ticket',
+                text: res.data.message || 'Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
     }
 }
 

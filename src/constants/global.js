@@ -18,5 +18,12 @@ const GLOBAL_PRIORITIES = Object.freeze({
     urgent: 'Urgent',
 })
 
-export { GLOBAL_PRIORITIES, GLOBAL_STATUS, TICKET_STATUS };
+const PRIORITY_COLORS = Object.freeze({
+    low: 'green',
+    medium: 'blue',
+    high: 'red',
+    urgent: '#e111e1',
+})
+
+export { GLOBAL_PRIORITIES, GLOBAL_STATUS, PRIORITY_COLORS, TICKET_STATUS };
 

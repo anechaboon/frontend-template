@@ -23,13 +23,12 @@
                                                 <v-icon size="14" @click="editTicketTitle">      
                                                     {{ isEditTitle ? 'ri-check-line' : 'ri-pencil-line' }}
                                                 </v-icon>
-
                                             </v-btn>
                                         </div>
                                     </div>
 
                                     <v-btn icon variant="text">
-                                        <v-icon class="text-h5">ri-more-2-line</v-icon>
+                                        <v-icon class="text-h5" @click="showAlert" >ri-more-2-line</v-icon>
                                     </v-btn>
                                 </div>
 
@@ -132,7 +131,7 @@
 
                                 <div class="text-center mb-6 align-center">
                                     <div class="d-flex align-center">
-                                        <div class="text-error text-h5 font-weight-bold float-start">
+                                        <div class="text-h5 font-weight-bold float-start" :style="{ color: PRIORITY_COLORS[ticket.priority] }">
                                             {{ ticket.priority }}
                                         </div>
                                     </div>
@@ -265,8 +264,6 @@
                 </v-col>
             </v-row>
         </v-container>
-
-
     </v-form>
 </template>
 
@@ -274,6 +271,8 @@
 import { getTicket } from '@/api/ticket.api';
 import moment from 'moment';
 import { onMounted, ref } from 'vue';
+
+import { PRIORITY_COLORS } from '@/constants/global.js';
 
 import { getCategories } from '@/api/category.api';
 import { getOrganizations } from '@/api/organization.api.js';
@@ -294,20 +293,24 @@ const valid = ref(false)
 const fetchOrganizations = async () => {
     const { data } = await getOrganizations({ status: 'active' })
     if (data.status) {
-        organizationOptions.value = convertObjectToOptions(
+        let options = convertObjectToOptions(
             data.data,
             'name'
         )
+        options.unshift({ title: 'Please Select', value: null })
+        organizationOptions.value = options
     } 
 }
 
 const fetchVessels = async () => {
     const { data } = await getVessels({ status: 'active' })
     if (data.status) {
-        vesselOptions.value = convertObjectToOptions(
+        let options = convertObjectToOptions(
             data.data,
             'name'
         )
+        options.unshift({ title: 'Please Select', value: null })
+        vesselOptions.value = options
     } 
 }
 
@@ -326,20 +329,24 @@ const fetchUsers = async () => {
 const fetchCategories = async () => {
     const { data } = await getCategories({ status: 'active' })
     if (data.status) {
-        categoryOptions.value = convertObjectToOptions(
+        let options = convertObjectToOptions(
             data.data,
             'name'
         )
+        options.unshift({ title: 'Please Select', value: null })
+        categoryOptions.value = options
     } 
 }
 
 const fetchServiceLines = async () => {
     const { data } = await getServiceLines({ status: 'active' })
     if (data.status) {
-        serviceLineOptions.value = convertObjectToOptions(
+        let options = convertObjectToOptions(
             data.data,
             'name'
         )
+        options.unshift({ title: 'Please Select', value: null })
+        serviceLineOptions.value = options
     } 
 }
 
@@ -449,7 +456,6 @@ const editContactEmail = () => {
 }
 
 const handleAddCCEmail = () => {
-
     // add input field for cc email
     const elementInput = document.createElement('input');
     elementInput.type = 'text';
@@ -464,6 +470,15 @@ const handleAddCCEmail = () => {
     };
     document.getElementById('TicketCCEmails').appendChild(elementInput);
     elementInput.focus();
+}
+
+const showAlert = () => {
+    Swal.fire({
+        title: 'More options coming soon!',
+        icon: 'info',
+        timer: 2000,
+        showConfirmButton: false
+    });
 }
 
 onMounted(() => {
